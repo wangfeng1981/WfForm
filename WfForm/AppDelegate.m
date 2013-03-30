@@ -24,7 +24,12 @@
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease];
+        
+        UINavigationController* navi = [[[UINavigationController alloc] init] autorelease] ;
+        [navi pushViewController:[[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease] animated:NO] ;
+        self.viewController = navi ;
+        
+        //self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease];
     } else {
         self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPad" bundle:nil] autorelease];
     }

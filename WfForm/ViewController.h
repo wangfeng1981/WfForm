@@ -7,7 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "WfFormController.h"
 @interface ViewController : UIViewController
+{
+    WfFormController* formController ;
+}
 
+-(IBAction)onUseForm:(id)sender ;
+
+//
+-(void)onPostTimeValueChanged:(id)sender ;
+-(void)pickerChanged1:(id)sender ;
 @end
