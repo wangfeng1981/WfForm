@@ -36,9 +36,12 @@
     textCell0.placeHolder = @"please input your name." ;
     WfFormCell* textCell1 = [WfFormCell textFieldCell:@"Password" value:@"" target:nil valueChanged:nil] ;
     textCell1.useSecurity = YES ;
+    WfFormCell* swi0 = [WfFormCell switcherCell:@"开关按钮" value:YES target:self valueChanged:@selector(onSwitchTapped:)] ;
     
-    NSArray* cellArray0 = [NSArray arrayWithObjects:textCell0,textCell1, nil] ;
+    NSArray* cellArray0 = [NSArray arrayWithObjects:textCell0,textCell1,swi0, nil] ;
     WfFormSection* section0 = [WfFormSection sectionTitle:nil cells:cellArray0] ;
+    section0.headerView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"secimg0"]] autorelease];
+    section0.footerView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"secimg1"]] autorelease];
     
     
     NSArray* ds0 = [NSArray arrayWithObjects:[NSArray arrayWithObjects:@"工作日",@"节假日",@"任何时间",nil],nil] ;
@@ -53,15 +56,22 @@
     WfFormCell* boxCell = [WfFormCell textBoxCell:@"拿到试玩版本。我一直觉得创意虽然重要，但游戏精品拼的是细节的把握。小魔女做得很棒，特别是那条扫描线提示下落的时间很贴心。继续挑战去了，各位尽情羡慕我吧。"] ;
     WfFormSection* section2 = [WfFormSection sectionTitle:@"长文本" cells:[NSArray arrayWithObjects:boxCell,nil]] ;
     
+    WfFormCell* button0 = [WfFormCell buttonCell:@"By UIGlossyButton 0" target:self tapAction:@selector(onButtonTapped:) btnColor:nil];
+    WfFormCell* button1 = [WfFormCell buttonCell:@"Dismiss" target:self tapAction:@selector(onButtonTapped:) btnType:WfFormButtonCellTypeActionSheetButton btnColor:nil];
+    WfFormCell* button2 = [WfFormCell buttonCell:@"OK" target:self tapAction:@selector(onButtonTapped:) btnType:WfFormButtonCellTypeNavigationButton btnColor:nil];
+    WfFormSection* section3 = [WfFormSection sectionTitle:nil cells:[NSArray arrayWithObjects:button0,button1,button2, nil]] ;
     
-    NSArray* sectionArray = [NSArray arrayWithObjects:section0,section1,section2, nil] ;
+    
+    NSArray* sectionArray = [NSArray arrayWithObjects:section0,section1,section2,section3, nil] ;
     WfFormController* formControl = [[WfFormController alloc] initWithStyle:UITableViewStyleGrouped andSectionArray:sectionArray willComplete:^(void){
         NSLog(@"User Name: %@",textCell0.textValue) ;
         NSLog(@"Password: %@",textCell1.textValue) ;
         return YES ;
     }] ;
+    formControl.title = @"Demo" ;
     formController = formControl ;
     [formControl autorelease] ;
+    formController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"backgroundpattern"]] ;
     [self.navigationController pushViewController:formControl animated:YES] ;
 }
 
@@ -95,5 +105,26 @@
     }
     tf.text = mstr ;
     [mstr release] ;
+}
+
+
+-(void)onButtonTapped:(id)sender
+{
+    int buttontag = ((UIView*)sender).tag ;
+    int isec = [formController formCellByTag:buttontag].isectionInTableView;
+    int irow = [formController formCellByTag:buttontag].irowInTableView ;
+
+    if( isec==3 && irow==1 )
+    {
+        [formController onFormDone] ;
+    }else if( isec==3 && irow==2 )
+    {
+        [formController dismissForm] ;
+    }
+    
+}
+-(void)onSwitchTapped:(id)sender
+{
+    NSLog(@"Switch value changed.") ;
 }
 @end

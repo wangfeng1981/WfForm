@@ -8,14 +8,15 @@
 
 #import "WfFormController.h"
 #import "UIGlossyButton.h"
-#import "MyTool.h"
+
+//#import <QuartzCore/QuartzCore.h>
 
 #define WFFORM_TEXTBOXCELL_TEXTWIDTH 280
 #define WFFORM_RELEASE(p) if(p){[p release];p=nil;}
 
 @implementation WfFormCell
 @synthesize orderTag,actionTarget,valueChangedAction,inputType,switcherValue;//assign
-@synthesize keyboardType,useSecurity,textBoxCellHeight ;//assign
+@synthesize keyboardType,useSecurity,textBoxCellHeight,buttonType,isectionInTableView,irowInTableView ;//assign
 
 @synthesize  placeHolder,pickerDataSource,labelText,buttonColor,textValue,textValueFont;//retain
 
@@ -82,9 +83,35 @@
     cell.labelText = labeltext ;
     cell.actionTarget = tar ;
     cell.valueChangedAction = act ;
-    cell.buttonColor = bcolor ;
+    
+    cell.buttonType = WfFormButtonCellTypeStandard ;
+    if( bcolor==nil ) cell.buttonColor = [UIColor darkGrayColor] ;
+    else cell.buttonColor = bcolor ;
     return cell ;
 }
+
++(WfFormCell*)buttonCell:(NSString*)labeltext target:(id)tar tapAction:(SEL)act btnType:(WfFormButtonCellType)btype btnColor:(UIColor*)bcolor
+{
+    WfFormCell* cell = [[[WfFormCell alloc] init] autorelease] ;
+    cell.inputType = WfFormCellTypeButton ;
+    cell.labelText = labeltext ;
+    cell.actionTarget = tar ;
+    cell.valueChangedAction = act ;
+    
+    cell.buttonType = btype ;
+    
+    if( bcolor == nil )
+    {
+        if( cell.buttonType==WfFormButtonCellTypeActionSheetButton )
+            cell.buttonColor = [UIColor redColor] ;
+        else if( cell.buttonType==WfFormButtonCellTypeNavigationButton )
+            cell.buttonColor = [UIColor doneButtonColor] ;
+        else cell.buttonColor = [UIColor darkGrayColor] ;
+    }else cell.buttonColor = bcolor ;
+    return cell ;
+}
+
+
 +(WfFormCell*)textBoxCell:(NSString*)val
 {
     WfFormCell* cell = [[[WfFormCell alloc] init] autorelease] ;
@@ -105,11 +132,13 @@
 //________________________________________________________
 #pragma mark - WfFormSection
 @implementation WfFormSection
-@synthesize cellArray,title ;
+@synthesize cellArray,title,headerView,footerView ;
 -(void)dealloc
 {
     WFFORM_RELEASE(cellArray) ;
     WFFORM_RELEASE(title) ;
+    WFFORM_RELEASE(headerView) ;
+    WFFORM_RELEASE(footerView) ;
     [super dealloc] ;
 }
 +(WfFormSection*)sectionTitle:(NSString*)tlt cells:(NSArray*)array
@@ -151,6 +180,8 @@
         for (WfFormSection* sec in sectionArray) {
             for (WfFormCell* cell in sec.cellArray) {
                 cell.orderTag = order++ ;
+                cell.isectionInTableView = [sectionArray indexOfObject:sec] ;
+                cell.irowInTableView = [sec.cellArray indexOfObject:cell] ;
                 if( cell.inputType == WfFormCellTypePicker )
                 {
                     [mTFCellArray addObject:[self tableView:self.tableView pickerCell:cell]] ;
@@ -179,8 +210,30 @@
     
     //inset space.
     [self.tableView setContentInset:UIEdgeInsetsMake(0, 0, 44, 0)] ;
+    
+    //background color
+    //self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"imageName.png"]] ;
 }
-
++(void)addDonePreNextButtonTo:(UITextField*)tf andTarget:(id)tar doneAct:(SEL)dact prevNextAct:(SEL)prevNextAct
+{
+    UIToolbar* toolbar = [[[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease] ;
+    toolbar.barStyle = UIBarStyleBlackTranslucent ;
+    toolbar.alpha = 0.5f ;
+    UIBarButtonItem* doneButton = [[[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStyleDone target:tar action:dact] autorelease] ;
+    doneButton.style = UIBarStyleBlackTranslucent ;
+    doneButton.tag = tf.tag ;
+    
+    UIBarButtonItem *flex = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
+    
+    UISegmentedControl* prevNext = [[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"上一项",@"下一项", nil]] autorelease] ;
+    prevNext.segmentedControlStyle = UISegmentedControlStyleBar ;
+    prevNext.momentary = YES ;
+    prevNext.tag = tf.tag ;
+    [prevNext addTarget:tar action:prevNextAct forControlEvents:UIControlEventValueChanged] ;
+    UIBarButtonItem *prevNextBtn = [[[UIBarButtonItem alloc] initWithCustomView:prevNext] autorelease];
+    [toolbar setItems:[NSArray arrayWithObjects:prevNextBtn ,flex,doneButton, nil]] ;
+    tf.inputAccessoryView = toolbar ;
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -226,12 +279,43 @@
         return nil ;
 }
 
-
+-(float)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    WfFormSection* sec = [sectionArray objectAtIndex:section] ;
+    if( sec.footerView )
+        return sec.footerView.frame.size.height  ;
+    return 0 ;
+}
+-(float)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    WfFormSection* sec = [sectionArray objectAtIndex:section] ;
+    if( sec.headerView )
+        return sec.headerView.frame.size.height  ;
+    if( sec.title )
+        return 22.f ;
+    return 0 ;
+}
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     WfFormSection* sec = (WfFormSection*)[sectionArray objectAtIndex:section];
     return sec.title ;
 }
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    WfFormSection* sec = [sectionArray objectAtIndex:section] ;
+    if( sec.headerView )
+        return sec.headerView ;
+    else return nil ;
+}
+
+-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    WfFormSection* sec = [sectionArray objectAtIndex:section] ;
+    if( sec.footerView )
+        return sec.footerView ;
+    else return nil ;
+}
+
 
 #pragma mark - Table view delegate
 
@@ -250,7 +334,6 @@
     WfFormCell* fcell = (WfFormCell*)[section.cellArray objectAtIndex:indexPath.row] ;
     if( fcell.inputType==WfFormCellTypeTextBox )
     {
-        
         return 20+fcell.textBoxCellHeight ;
     }else return 44.f ;
 }
@@ -291,7 +374,7 @@
     
     if( fcell.textValue )
         tf.text = fcell.textValue ;
-    [MyTool addDonePreNextButtonTo:tf andTarget:self doneAct:@selector(onEditDone:) prevNextAct:@selector(onPrevNext:)] ;
+    [WfFormController addDonePreNextButtonTo:tf andTarget:self doneAct:@selector(onEditDone:) prevNextAct:@selector(onPrevNext:)] ;
     [tf release] ;
     tf = nil ;
     return cell ;
@@ -324,7 +407,7 @@
     tf.text = fcell.textValue ;
     picker.tag = fcell.orderTag ;
     
-    [MyTool addDonePreNextButtonTo:tf andTarget:self doneAct:@selector(onEditDone:) prevNextAct:@selector(onPrevNext:)] ;
+    [WfFormController addDonePreNextButtonTo:tf andTarget:self doneAct:@selector(onEditDone:) prevNextAct:@selector(onPrevNext:)] ;
     [tf release] ;
     tf = nil ;
     return cell ;
@@ -333,9 +416,9 @@
 
 -(UITableViewCell*)tableView:(UITableView*)tableView switcherCell:(WfFormCell*)fcell
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SwiCell"];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PCell"] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SwiCell"] autorelease];
         cell.textLabel.font = [UIFont fontWithName:@"STHeitiTC-Medium" size:15] ;
     }
     cell.textLabel.text = fcell.labelText ;
@@ -352,30 +435,48 @@
 }
 -(UITableViewCell*)tableView:(UITableView*)tableView buttonCell:(WfFormCell*)fcell
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BtnCell"];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PCell"] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"BtnCell"] autorelease];
         cell.textLabel.font = [UIFont fontWithName:@"STHeitiTC-Medium" size:15] ;
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone ;
     
     UIGlossyButton* gloss = [[[UIGlossyButton alloc] initWithFrame:CGRectMake(0, 0, 300, 44)] autorelease] ;
-    [gloss setNavigationButtonWithColor:fcell.buttonColor];
-    [gloss useWhiteLabel:YES] ;
+
+    if( fcell.buttonType==WfFormButtonCellTypeActionSheetButton )
+    {
+        [gloss setActionSheetButtonWithColor: fcell.buttonColor];
+    }else if( fcell.buttonType==WfFormButtonCellTypeNavigationButton )
+    {
+        [gloss setNavigationButtonWithColor:fcell.buttonColor] ;
+    }else
+    {//WfFormButtonCellTypeStandard
+        gloss.tintColor = fcell.buttonColor ;
+        [gloss useWhiteLabel:YES] ;
+    }
+    
     [gloss setTitle:fcell.labelText forState:UIControlStateNormal] ;
     gloss.tag = fcell.orderTag ;
     cell.backgroundColor = [UIColor clearColor] ;
+    //cell.layer.borderWidth = 0 ;
+    if( fcell.actionTarget )
+        [gloss addTarget:fcell.actionTarget action:fcell.valueChangedAction forControlEvents:UIControlEventTouchUpInside] ;
 
     //..
+    //float centerx = cell.bounds.size.width/2 ;
+    if( self.tableView.style==UITableViewStyleGrouped )
+        gloss.center = CGPointMake(150,22) ;
+    else gloss.center = CGPointMake(160, 22) ;
     [cell.contentView addSubview:gloss] ;
     
     return cell ;
 }
 -(UITableViewCell*)tableView:(UITableView*)tableView textBoxCell:(WfFormCell*)fcell 
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BoxCell"];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"BCell"] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"BoxCell"] autorelease];
     }
     //..
     //cell.textLabel.backgroundColor = [UIColor clearColor] ;
@@ -424,7 +525,10 @@
         if( block_completion()==NO ) return ;
     [self.navigationController popViewControllerAnimated:YES] ;
 }
-
+-(void)dismissForm
+{
+    [self.navigationController popViewControllerAnimated:YES] ;
+}
 -(void)onEditDone:(id)sender
 {
     UIView* view1 = (UIView*)sender ;
@@ -443,34 +547,63 @@
     {
         //[currentTF endEditing:YES] ;
         [currentTF resignFirstResponder] ;
-        NSLog(@"cur %d resign ++++",currentTF.tag);
+        //NSLog(@"cur %d resign ++++",currentTF.tag);
     }
     
     for (int i = 0; i<[textFieldTableCellArray count]; i++) {
         UITableViewCell* tcell = (UITableViewCell*)[textFieldTableCellArray objectAtIndex:i] ;
         if( tcell.tag == tag )
         {
-            NSLog(@"cur tag in quick");
+            //NSLog(@"cur tag in quick");
             int newQuickIndex = i-1 ;
             if( iseg == 1) newQuickIndex = i+1 ;
             if( newQuickIndex>=0 && newQuickIndex<[textFieldTableCellArray count] )
             {
-                NSLog(@"new index in quick %d",newQuickIndex) ;
+                //NSLog(@"new index in quick %d",newQuickIndex) ;
                 UITableViewCell* newTCell = (UITableViewCell*)[textFieldTableCellArray objectAtIndex:newQuickIndex] ;
                 UITextField* newTF = [self textFieldByTag:newTCell.tag  ] ;
                 if( newTF )
                 {
-                    [newTF becomeFirstResponder] ;
-                    NSLog(@"new %d do first",newTF.tag) ;
-                }else NSLog(@"newTF nil,newTag %d",newTCell.tag);
+                    NSIndexPath* newIndexPath = [self.tableView indexPathForCell:newTCell] ;
+                    if( newIndexPath )
+                    {
+                        //NSLog(@"TCell is in tableview") ;
+                        [newTF becomeFirstResponder] ;
+                        //NSLog(@"new %d do first",newTF.tag) ;
+                    }else
+                    {
+                        //NSLog(@"TCell unavailabel. Scroll to its center.") ;
+                        WfFormCell* newfcell = [self formCellByTag:newTF.tag] ;
+                        newIndexPath = [NSIndexPath indexPathForRow:newfcell.irowInTableView inSection:newfcell.isectionInTableView] ;
+                        [self.tableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES] ;
+                        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC);
+                        dispatch_after(popTime, dispatch_get_main_queue(), ^{
+                            NSIndexPath* newIndexPath2 = [self.tableView indexPathForCell:newTCell] ;
+                            if (newIndexPath2 != nil) 
+                                [newTF becomeFirstResponder];
+                            //else NSLog(@"After scroll ,still not found cell in tableview.");
+                        });
+                    }
+                }//else NSLog(@"newTF nil,newTag %d",newTCell.tag);
             }
-            NSLog(@"for out");
+            //NSLog(@"for out");
             break ;
         }
     }
     
 }
-
+-(void)onSwitchValueChanged:(id)sender
+{
+    UISwitch* v1 = (UISwitch*)sender ;
+    int switag = v1.tag ;
+    WfFormCell* fcell = [self formCellByTag:switag] ;
+    if( fcell )
+    {
+        fcell.switcherValue = v1.isOn ;
+        if( fcell.actionTarget )
+            [fcell.actionTarget performSelector:fcell.valueChangedAction withObject:sender] ;
+    }
+}
 
 
 //@protocol UIPickerViewDataSource<NSObject>------------------
@@ -526,14 +659,6 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    WfFormCell* fcell = [self formCellByTag:textField.tag] ;
-    if( fcell )
-    {
-        if (fcell.inputType==WfFormCellTypePicker) {
-            //UIPickerView* picker = (UIPickerView*)textField.inputView ;
-            //[picker selectRow:fcell.pickerValue inComponent:0 animated:YES] ;
-        }
-    }
 
 }
 

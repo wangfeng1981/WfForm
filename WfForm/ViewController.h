@@ -18,4 +18,6 @@
 //
 -(void)onPostTimeValueChanged:(id)sender ;
 -(void)pickerChanged1:(id)sender ;
+-(void)onButtonTapped:(id)sender ;
+-(void)onSwitchTapped:(id)sender ;
 @end

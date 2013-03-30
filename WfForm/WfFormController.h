@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+enum WfFormButtonCellType
+{
+    WfFormButtonCellTypeStandard,
+    WfFormButtonCellTypeActionSheetButton,
+    WfFormButtonCellTypeNavigationButton
+};
+typedef enum WfFormButtonCellType WfFormButtonCellType;
+
 enum WfFormCellType
 {
     WfFormCellTypeTextField ,
@@ -28,12 +36,17 @@ typedef enum WfFormCellType WfFormCellType;
     id actionTarget ;
     SEL valueChangedAction ;//for button as tappedAction.
     NSArray* pickerDataSource ;
-    UIColor* buttonColor ;
     UIKeyboardType keyboardType ;
     BOOL useSecurity ;
     NSString* placeHolder ;
     float textBoxCellHeight ;
     UIFont* textValueFont ;
+    WfFormButtonCellType buttonType ;
+    UIColor* buttonColor ;
+    
+    //
+    int isectionInTableView ;
+    int irowInTableView ;
 }
 @property(assign,nonatomic)int orderTag ;
 @property(retain,nonatomic)NSString* labelText ;
@@ -49,11 +62,15 @@ typedef enum WfFormCellType WfFormCellType;
 @property(retain,nonatomic)NSString* placeHolder ;
 @property(assign,nonatomic)float textBoxCellHeight ;
 @property(retain,nonatomic)UIFont* textValueFont ;
+@property(assign,nonatomic)WfFormButtonCellType buttonType ;
+@property(assign,nonatomic)int isectionInTableView ;
+@property(assign,nonatomic)int irowInTableView ;
 
 +(WfFormCell*)textFieldCell:(NSString*)labeltext value:(NSString*)val target:(id)target valueChanged:(SEL)action ;
 +(WfFormCell*)pickerCell:(NSString*)labeltext value:(NSString*)val datasrc:(NSArray*)array target:(id)target valueChanged:(SEL)action;
 +(WfFormCell*)switcherCell:(NSString*)labeltext value:(BOOL)val target:(id)target valueChanged:(SEL)action;
 +(WfFormCell*)buttonCell:(NSString*)labeltext target:(id)tar tapAction:(SEL)act btnColor:(UIColor*)bcolor ;
++(WfFormCell*)buttonCell:(NSString*)labeltext target:(id)tar tapAction:(SEL)act btnType:(WfFormButtonCellType)btype btnColor:(UIColor*)bcolor ;
 +(WfFormCell*)textBoxCell:(NSString*)val ;
 
 
@@ -65,9 +82,13 @@ typedef enum WfFormCellType WfFormCellType;
 {
     NSString* title ;
     NSArray* cellArray ;
+    UIView* headerView ;
+    UIView* footerView ;
 }
 @property(retain,nonatomic)NSString* title  ;
 @property(retain,nonatomic)NSArray* cellArray  ;
+@property(retain,nonatomic)UIView* headerView ;
+@property(retain,nonatomic)UIView* footerView ;
 +(WfFormSection*)sectionTitle:(NSString*)tlt cells:(NSArray*)array ;
 @end
 
@@ -85,6 +106,8 @@ typedef enum WfFormCellType WfFormCellType;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style andSectionArray:(NSArray*)array willComplete:(BOOL(^)(void))completionblock ;
++(void)addDonePreNextButtonTo:(UITextField*)tf andTarget:(id)tar doneAct:(SEL)dact prevNextAct:(SEL)prevNextAct ;
+
 
 //private
 -(UITableViewCell*)tableView:(UITableView*)tableView pickerCell:(WfFormCell*)fcell ;
@@ -95,10 +118,12 @@ typedef enum WfFormCellType WfFormCellType;
 
 -(void)onEditDone:(id)sender ;
 -(void)onPrevNext:(id)sender ;
+-(void)onSwitchValueChanged:(id)sender ;
 //-(UITextField*)prevOrNextTextField:(int)currentTFtag prev:(BOOL)prev ;
 
 
 -(void)onFormDone ;
+-(void)dismissForm ;
 -(WfFormCell*)formCellByTag:(int)tag ;
 -(UITableViewCell*)textFieldTableCellByTag:(int)tag ;
 -(UITextField*)textFieldByTag:(int)tag ;

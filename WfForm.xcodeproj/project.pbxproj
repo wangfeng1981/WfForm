@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0E82AB1706CC1200659E4F /* secimg1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0E82A91706CC1200659E4F /* secimg1.png */; };
+		0A0E82AC1706CC1200659E4F /* secimg0.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0E82AA1706CC1200659E4F /* secimg0.png */; };
 		0A4DF2921705D08600BEF2E7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4DF2911705D08600BEF2E7 /* UIKit.framework */; };
 		0A4DF2941705D08600BEF2E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4DF2931705D08600BEF2E7 /* Foundation.framework */; };
 		0A4DF2961705D08600BEF2E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4DF2951705D08600BEF2E7 /* CoreGraphics.framework */; };
@@ -20,11 +22,14 @@
 		0A4DF2AE1705D08600BEF2E7 /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A4DF2AC1705D08600BEF2E7 /* ViewController_iPhone.xib */; };
 		0A4DF2B11705D08600BEF2E7 /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A4DF2AF1705D08600BEF2E7 /* ViewController_iPad.xib */; };
 		0A4DF2B91705D19E00BEF2E7 /* WfFormController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4DF2B81705D19E00BEF2E7 /* WfFormController.m */; };
-		0A4DF2C11705D52600BEF2E7 /* MyTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4DF2BE1705D52600BEF2E7 /* MyTool.m */; };
-		0A4DF2C21705D52600BEF2E7 /* UIGlossyButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4DF2C01705D52600BEF2E7 /* UIGlossyButton.m */; };
+		0AEC71B7170686FB0046E1DA /* UIGlossyButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC71AB1706853A0046E1DA /* UIGlossyButton.m */; settings = {COMPILER_FLAGS = "-obj"; }; };
+		0AEC71C4170693350046E1DA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AEC71C3170693350046E1DA /* QuartzCore.framework */; };
+		0AEC71D21706A43C0046E1DA /* backgroundpattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AEC71D11706A43C0046E1DA /* backgroundpattern.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A0E82A91706CC1200659E4F /* secimg1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = secimg1.png; sourceTree = "<group>"; };
+		0A0E82AA1706CC1200659E4F /* secimg0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = secimg0.png; sourceTree = "<group>"; };
 		0A4DF28D1705D08600BEF2E7 /* WfForm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WfForm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A4DF2911705D08600BEF2E7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		0A4DF2931705D08600BEF2E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -44,10 +49,16 @@
 		0A4DF2B01705D08600BEF2E7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
 		0A4DF2B71705D19E00BEF2E7 /* WfFormController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WfFormController.h; sourceTree = "<group>"; };
 		0A4DF2B81705D19E00BEF2E7 /* WfFormController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WfFormController.m; sourceTree = "<group>"; };
-		0A4DF2BD1705D52600BEF2E7 /* MyTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyTool.h; path = ../../WfLibrary/MyTool.h; sourceTree = "<group>"; };
-		0A4DF2BE1705D52600BEF2E7 /* MyTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyTool.m; path = ../../WfLibrary/MyTool.m; sourceTree = "<group>"; };
-		0A4DF2BF1705D52600BEF2E7 /* UIGlossyButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIGlossyButton.h; path = ../../WfLibrary/UIGlossyButton.h; sourceTree = "<group>"; };
-		0A4DF2C01705D52600BEF2E7 /* UIGlossyButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIGlossyButton.m; path = ../../WfLibrary/UIGlossyButton.m; sourceTree = "<group>"; };
+		0ABED7A21706EAD4005E1D75 /* wfform1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wfform1.png; sourceTree = "<group>"; };
+		0ABED7A31706EAD4005E1D75 /* wfform2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wfform2.png; sourceTree = "<group>"; };
+		0ABED7A41706EAD4005E1D75 /* wfform3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wfform3.png; sourceTree = "<group>"; };
+		0ABED7A51706EAD4005E1D75 /* wfform4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wfform4.png; sourceTree = "<group>"; };
+		0ABED7A61706EAD4005E1D75 /* wfform5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wfform5.png; sourceTree = "<group>"; };
+		0ABED7A71706EAD4005E1D75 /* wfform6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wfform6.png; sourceTree = "<group>"; };
+		0AEC71AA1706853A0046E1DA /* UIGlossyButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UIGlossyButton.h; path = ../../UIGlossyButton/UIGlossyButton/UIGlossyButton.h; sourceTree = "<group>"; };
+		0AEC71AB1706853A0046E1DA /* UIGlossyButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UIGlossyButton.m; path = ../../UIGlossyButton/UIGlossyButton/UIGlossyButton.m; sourceTree = "<group>"; };
+		0AEC71C3170693350046E1DA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		0AEC71D11706A43C0046E1DA /* backgroundpattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backgroundpattern.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AEC71C4170693350046E1DA /* QuartzCore.framework in Frameworks */,
 				0A4DF2921705D08600BEF2E7 /* UIKit.framework in Frameworks */,
 				0A4DF2941705D08600BEF2E7 /* Foundation.framework in Frameworks */,
 				0A4DF2961705D08600BEF2E7 /* CoreGraphics.framework in Frameworks */,
@@ -67,6 +79,15 @@
 		0A4DF2821705D08600BEF2E7 = {
 			isa = PBXGroup;
 			children = (
+				0ABED7A21706EAD4005E1D75 /* wfform1.png */,
+				0ABED7A31706EAD4005E1D75 /* wfform2.png */,
+				0ABED7A41706EAD4005E1D75 /* wfform3.png */,
+				0ABED7A51706EAD4005E1D75 /* wfform4.png */,
+				0ABED7A61706EAD4005E1D75 /* wfform5.png */,
+				0ABED7A71706EAD4005E1D75 /* wfform6.png */,
+				0AEC71D11706A43C0046E1DA /* backgroundpattern.png */,
+				0A0E82A91706CC1200659E4F /* secimg1.png */,
+				0A0E82AA1706CC1200659E4F /* secimg0.png */,
 				0A4DF2971705D08600BEF2E7 /* WfForm */,
 				0A4DF2901705D08600BEF2E7 /* Frameworks */,
 				0A4DF28E1705D08600BEF2E7 /* Products */,
@@ -84,6 +105,7 @@
 		0A4DF2901705D08600BEF2E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0AEC71C3170693350046E1DA /* QuartzCore.framework */,
 				0A4DF2911705D08600BEF2E7 /* UIKit.framework */,
 				0A4DF2931705D08600BEF2E7 /* Foundation.framework */,
 				0A4DF2951705D08600BEF2E7 /* CoreGraphics.framework */,
@@ -94,10 +116,8 @@
 		0A4DF2971705D08600BEF2E7 /* WfForm */ = {
 			isa = PBXGroup;
 			children = (
-				0A4DF2BD1705D52600BEF2E7 /* MyTool.h */,
-				0A4DF2BE1705D52600BEF2E7 /* MyTool.m */,
-				0A4DF2BF1705D52600BEF2E7 /* UIGlossyButton.h */,
-				0A4DF2C01705D52600BEF2E7 /* UIGlossyButton.m */,
+				0AEC71AA1706853A0046E1DA /* UIGlossyButton.h */,
+				0AEC71AB1706853A0046E1DA /* UIGlossyButton.m */,
 				0A4DF2B71705D19E00BEF2E7 /* WfFormController.h */,
 				0A4DF2B81705D19E00BEF2E7 /* WfFormController.m */,
 				0A4DF2A01705D08600BEF2E7 /* AppDelegate.h */,
@@ -182,6 +202,9 @@
 				0A4DF2A81705D08600BEF2E7 /* Default-568h@2x.png in Resources */,
 				0A4DF2AE1705D08600BEF2E7 /* ViewController_iPhone.xib in Resources */,
 				0A4DF2B11705D08600BEF2E7 /* ViewController_iPad.xib in Resources */,
+				0AEC71D21706A43C0046E1DA /* backgroundpattern.png in Resources */,
+				0A0E82AB1706CC1200659E4F /* secimg1.png in Resources */,
+				0A0E82AC1706CC1200659E4F /* secimg0.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,8 +219,7 @@
 				0A4DF2A21705D08600BEF2E7 /* AppDelegate.m in Sources */,
 				0A4DF2AB1705D08600BEF2E7 /* ViewController.m in Sources */,
 				0A4DF2B91705D19E00BEF2E7 /* WfFormController.m in Sources */,
-				0A4DF2C11705D52600BEF2E7 /* MyTool.m in Sources */,
-				0A4DF2C21705D52600BEF2E7 /* UIGlossyButton.m in Sources */,
+				0AEC71B7170686FB0046E1DA /* UIGlossyButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +345,7 @@
 				0A4DF2B61705D08600BEF2E7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
