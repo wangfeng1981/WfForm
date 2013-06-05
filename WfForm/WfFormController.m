@@ -631,7 +631,11 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
+    
     WfFormCell* fcell = [self formCellByTag:pickerView.tag] ;
+    if( fcell.actionTarget )
+        [fcell.actionTarget performSelector:fcell.valueChangedAction withObject:pickerView] ;
+    
     UITextField* tf = [self textFieldByTag:pickerView.tag  ] ;
     NSMutableString* mstr = [[NSMutableString alloc] init] ;
     for (int i = 0 ; i<[fcell.pickerDataSource count] ; i++) {
@@ -644,8 +648,6 @@
     [mstr release] ;
     mstr=nil ;
     NSLog(@"picker changed.%@",tf.text) ;
-    if( fcell.actionTarget )
-        [fcell.actionTarget performSelector:fcell.valueChangedAction withObject:pickerView] ;
 }
 
 
