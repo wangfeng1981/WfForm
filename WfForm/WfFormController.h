@@ -43,6 +43,7 @@ typedef enum WfFormCellType WfFormCellType;
     UIFont* textValueFont ;
     WfFormButtonCellType buttonType ;
     UIColor* buttonColor ;
+    BOOL readonly ;
     
     //
     int isectionInTableView ;
@@ -65,6 +66,7 @@ typedef enum WfFormCellType WfFormCellType;
 @property(assign,nonatomic)WfFormButtonCellType buttonType ;
 @property(assign,nonatomic)int isectionInTableView ;
 @property(assign,nonatomic)int irowInTableView ;
+@property(assign,nonatomic)BOOL readonly ;
 
 +(WfFormCell*)textFieldCell:(NSString*)labeltext value:(NSString*)val target:(id)target valueChanged:(SEL)action ;
 +(WfFormCell*)pickerCell:(NSString*)labeltext value:(NSString*)val datasrc:(NSArray*)array target:(id)target valueChanged:(SEL)action;
@@ -103,6 +105,7 @@ typedef enum WfFormCellType WfFormCellType;
     NSArray* textFieldTableCellArray ;
 
     BOOL (^block_completion)(void) ;// return YES for completion.
+
 }
 
 - (id)initWithStyle:(UITableViewStyle)style andSectionArray:(NSArray*)array willComplete:(BOOL(^)(void))completionblock ;
@@ -127,4 +130,8 @@ typedef enum WfFormCellType WfFormCellType;
 -(WfFormCell*)formCellByTag:(int)tag ;
 -(UITableViewCell*)textFieldTableCellByTag:(int)tag ;
 -(UITextField*)textFieldByTag:(int)tag ;
+
+//set navigationbar right-button. 
+-(void)setNavigationBarRightButton:(NSString*)title target:(id)tar action:(SEL)act ;
+
 @end

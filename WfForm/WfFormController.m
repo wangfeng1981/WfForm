@@ -16,7 +16,7 @@
 
 @implementation WfFormCell
 @synthesize orderTag,actionTarget,valueChangedAction,inputType,switcherValue;//assign
-@synthesize keyboardType,useSecurity,textBoxCellHeight,buttonType,isectionInTableView,irowInTableView ;//assign
+@synthesize keyboardType,useSecurity,textBoxCellHeight,buttonType,isectionInTableView,irowInTableView,readonly ;//assign
 
 @synthesize  placeHolder,pickerDataSource,labelText,buttonColor,textValue,textValueFont;//retain
 
@@ -40,6 +40,7 @@
         self.keyboardType = UIKeyboardTypeDefault ;
         self.useSecurity = NO ;
         self.textBoxCellHeight = 44.f ;
+        self.readonly = NO ;
     }
     return self ;
 }
@@ -205,7 +206,7 @@
 {
     [super viewDidLoad];
     //..
-    UIBarButtonItem* formDone = [[[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStyleDone target:self action:@selector(onFormDone)] autorelease] ;
+    UIBarButtonItem* formDone = [[[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(onFormDone)] autorelease] ;
     self.navigationItem.rightBarButtonItem = formDone ;
     
     //inset space.
@@ -240,6 +241,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+//set navigationbar right-button. 
+-(void)setNavigationBarRightButton:(NSString*)title target:(id)tar action:(SEL)act
+{
+    UIBarButtonItem* right = [[[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:tar action:act] autorelease] ;
+    self.navigationItem.rightBarButtonItem = right ;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -265,7 +273,11 @@
         return [self tableView:tableView buttonCell:fcell] ;
     }else if( fcell.inputType==WfFormCellTypeTextField )
     {
-        return [self textFieldTableCellByTag:fcell.orderTag] ; // textfield
+        UITableViewCell* uicell = [self textFieldTableCellByTag:fcell.orderTag] ; // textfield
+        UITextField* tf = (UITextField*)[uicell.contentView viewWithTag:fcell.orderTag] ;
+        if( tf )
+            tf.text = fcell.textValue ;
+        return uicell ;
     }else if( fcell.inputType == WfFormCellTypePicker )
     {
         return [self textFieldTableCellByTag:fcell.orderTag] ; //textfiled
@@ -374,7 +386,15 @@
     
     if( fcell.textValue )
         tf.text = fcell.textValue ;
-    [WfFormController addDonePreNextButtonTo:tf andTarget:self doneAct:@selector(onEditDone:) prevNextAct:@selector(onPrevNext:)] ;
+    
+    if( fcell.readonly )
+    {
+        tf.enabled = NO ;
+    }else
+    {
+        tf.enabled = YES ;
+        [WfFormController addDonePreNextButtonTo:tf andTarget:self doneAct:@selector(onEditDone:) prevNextAct:@selector(onPrevNext:)] ;
+    }
     [tf release] ;
     tf = nil ;
     return cell ;
@@ -407,7 +427,15 @@
     tf.text = fcell.textValue ;
     picker.tag = fcell.orderTag ;
     
-    [WfFormController addDonePreNextButtonTo:tf andTarget:self doneAct:@selector(onEditDone:) prevNextAct:@selector(onPrevNext:)] ;
+    if( fcell.readonly )
+    {
+        tf.enabled = NO ;
+    }else
+    {
+        tf.enabled = YES ;
+        [WfFormController addDonePreNextButtonTo:tf andTarget:self doneAct:@selector(onEditDone:) prevNextAct:@selector(onPrevNext:)] ;
+    }
+    
     [tf release] ;
     tf = nil ;
     return cell ;

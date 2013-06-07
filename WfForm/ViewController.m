@@ -31,9 +31,11 @@
 
 -(IBAction)onUseForm:(id)sender
 {
+    
     WfFormCell* textCell0 = [WfFormCell textFieldCell:@"User Name" value:@"" target:nil valueChanged:nil] ;
     textCell0.keyboardType = UIKeyboardTypeEmailAddress ;
     textCell0.placeHolder = @"please input your name." ;
+    textCell0.readonly = YES ;
     WfFormCell* textCell1 = [WfFormCell textFieldCell:@"Password" value:@"" target:nil valueChanged:nil] ;
     textCell1.useSecurity = YES ;
     WfFormCell* swi0 = [WfFormCell switcherCell:@"开关按钮" value:YES target:self valueChanged:@selector(onSwitchTapped:)] ;
@@ -68,9 +70,13 @@
         NSLog(@"Password: %@",textCell1.textValue) ;
         return YES ;
     }] ;
+
     formControl.title = @"Demo" ;
     formController = formControl ;
     [formControl autorelease] ;
+    //modify right button.
+    //[formControl setNavigationBarRightButton:@"修改" target:nil action:nil] ;
+    
     formController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"backgroundpattern"]] ;
     [self.navigationController pushViewController:formControl animated:YES] ;
 }
